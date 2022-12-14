@@ -22,7 +22,7 @@ const Dashboard = () => {
       title: 'moon day',
       owner: 'Anina',
       avatar: 'https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png',
-      status: 'working',
+      status: 'working on it',
       priority: 2,
       progress: 30,
       description: 'fine all over the wallpaper',
@@ -35,7 +35,7 @@ const Dashboard = () => {
       title: 'light ',
       owner: 'Anina',
       avatar: 'https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png',
-      status: 'working',
+      status: 'working on it',
       priority: 2,
       progress: 30,
       description: 'fine all over the wallpaper',
@@ -52,7 +52,7 @@ const Dashboard = () => {
     <div className="dashboard">
       <h1> My Projects </h1>
       <div className="ticket-container">
-      {tickets &&
+      {tickets && 
           uniqueCategories?.map((uniqueCategory, categoryIndex) => (
             <div key={categoryIndex}>
               <h3>{uniqueCategory}</h3>
