@@ -194,7 +194,8 @@ nav .icon{
   margin: 20px 0 0 0;
 }
 
-.ticket form select,input{
+.ticket form select,
+.ticket form input{
   padding: 10px;
   font-size: 15px;
   border-radius: 10px;
@@ -204,6 +205,19 @@ nav .icon{
 }
 
 .ticket form .multiple-input-container{
-display: flex;
+
 margin: 20px 0 20px 0;
+}
+
+
+.ticket .img-preview {
+  margin: 20px;
+  width: 200px;
+  height: 200px;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.ticket .img-preview img {
+  width: 100%;
 }
