@@ -31,11 +31,14 @@ nav .controls-container{
   padding: 40px 25px;
   display:flex;
   flex-direction:column;
+  
 }
 
 
 nav .logo-container img{
   width: 20px;
+  cursor: pointer;
+  
 }
 
 nav .icon{

@@ -1,47 +1,44 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import { TicketCard } from '../components'
 
 const Dashboard = () => {
 
-  const tickets = [
-    {
-      category: 'q1 2022',
-      color: 'red',
-      title: 'moon night',
-      owner: 'Anina',
-      avatar: 'https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png',
-      status: 'done',
-      priority: 5,
-      progress: 40,
-      description: 'fine all over the wallpaper',
-      timestamp: '2017-02-11T07:34:17+0000'
-    },
-    {
-      category: 'q2 2022',
-      color: 'blue',
-      title: 'moon day',
-      owner: 'Anina',
-      avatar: 'https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png',
-      status: 'working on it',
-      priority: 2,
-      progress: 30,
-      description: 'fine all over the wallpaper',
-      timestamp: '2018-02-11T07:34:17+0000'
-    }
-    ,
-    {
-      category: 'q2 2022',
-      color: 'red',
-      title: 'light ',
-      owner: 'Anina',
-      avatar: 'https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png',
-      status: 'working on it',
-      priority: 2,
-      progress: 30,
-      description: 'fine all over the wallpaper',
-      timestamp: '2018-02-11T07:34:17+0000'
-    }
+  const [tickets,setTickets] = useState(null)
+
+  useEffect( () => {
+
+    const loadData = async() =>{
+    const response =  await axios.get('http://localhost:8080/tickets')
+
+    //wasn't sure how to get the Documet Id with the object.. open to better suggestions
+    const dataObject = response.data.data
+
+    const arrayOfKeys = Object.keys(dataObject)
+    const arrayOfData = Object.keys(dataObject).map((key) => dataObject[key])
+    const formattedArray = []
+    arrayOfKeys.forEach((key, index) => {
+      const formmatedData = { ...arrayOfData[index] }
+      formmatedData['documentId'] = key
+      formattedArray.push(formmatedData)
+    })
+
+    setTickets(formattedArray)}
+
+    loadData();
+
+
+  }, [])
+
+
+  const colors = [
+    'rgb(255,179,186)',
+    'rgb(255,223,186)',
+    'rgb(255,255,186)',
+    'rgb(186,255,201)',
+    'rgb(186,225,255)',
   ]
+
 
   const uniqueCategories = [
     ...new Set(tickets?.map(({ category }) => category)),
@@ -61,7 +58,7 @@ const Dashboard = () => {
                 .map((filteredTicket, _index) => (
                   <TicketCard
                     id={_index}
-                    color={filteredTicket.color}
+                    color={colors[categoryIndex] || colors[0]}
                     ticket={filteredTicket}
                   />
                 ))}
