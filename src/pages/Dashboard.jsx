@@ -1,10 +1,12 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { TicketCard } from '../components'
+import CategoriesContext from '../context'
 
 const Dashboard = () => {
 
   const [tickets,setTickets] = useState(null)
+  const { categories, setCategories } = useContext(CategoriesContext)
 
   useEffect( () => {
 
@@ -29,6 +31,11 @@ const Dashboard = () => {
 
 
   }, [])
+
+
+  useEffect(() => {
+    setCategories([...new Set(tickets?.map(({ category }) => category))])
+  }, [tickets])
 
 
   const colors = [
@@ -57,7 +64,7 @@ const Dashboard = () => {
                 .filter((ticket) => ticket.category === uniqueCategory)
                 .map((filteredTicket, _index) => (
                   <TicketCard
-                    id={_index}
+                    key={_index}
                     color={colors[categoryIndex] || colors[0]}
                     ticket={filteredTicket}
                   />

@@ -1,6 +1,7 @@
 import axios from 'axios'
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import CategoriesContext from '../context'
 
 const TicketPage = ({ editMode }) => {
 
@@ -10,12 +11,27 @@ const TicketPage = ({ editMode }) => {
     timestamp: new Date().toISOString()
   })
 
+  const { categories, setCategories } = useContext(CategoriesContext)
+
+
   const navigate = useNavigate()
+  let {id} = useParams()
 
   
 
   const handeSubmit = async (e) => {
       e.preventDefault()
+
+      if(editMode){
+        const response = await axios.put(`http://localhost:8080/tickets/${id}`,{
+          data:formData,
+        })
+        const success=response.status ==200
+
+        if(success){
+          navigate('/')
+        }
+      }
 
       if(!editMode){
         const  response = await axios.post('http://localhost:8080/tickets',{
@@ -40,8 +56,21 @@ const TicketPage = ({ editMode }) => {
     }))
   }
 
+  const fetchData = async ()=>{
+    const response = await axios.get(`http://localhost:8080/tickets/${id}`)
+    console.log('AAAAAA',response)
+    setFormDate(response.data.data)
+  }
 
-  const categories = ['test1', 'test2']
+  useEffect(()=>{
+    if(editMode){
+      fetchData()
+    }
+    
+  },[])
+
+
+  
 
 
   return (
@@ -58,7 +87,7 @@ const TicketPage = ({ editMode }) => {
               type="text"
               onChange={handleChange}
               required={true}
-              value={formData.title}
+              value={formData.title||''}
             />
             <label htmlFor='description'>Description</label>
             <input
@@ -67,7 +96,7 @@ const TicketPage = ({ editMode }) => {
               type="text"
               onChange={handleChange}
               required={true}
-              value={formData.description}
+              value={formData.description||''}
             />
 
             <label>Category</label>
@@ -87,7 +116,7 @@ const TicketPage = ({ editMode }) => {
               type="text"
               onChange={handleChange}
               required={true}
-              value={formData.category}
+              value={formData.category||''}
             />
 
             <label>Priority</label>
@@ -149,7 +178,7 @@ const TicketPage = ({ editMode }) => {
                   type="range"
                   id="progress"
                   name="progress"
-                  value={formData.progress}
+                  value={formData.progress||''}
                   min="0"
                   max="100"
                   onChange={handleChange}
@@ -161,12 +190,12 @@ const TicketPage = ({ editMode }) => {
                 <label>Status</label>
                 <select
                   name='status'
-                  value={formData.status}
+                  value={formData.status||''}
                   onChange={handleChange}
                 >
                   <option selected={formData.status == 'done'} value="done" >Done</option>
                   <option selected={formData.status == 'working on it'} value="working on it" >Working on it</option>
-                  <option selected={formData.status == 'stuck'} value="workging on it">Stuck</option>
+                  <option selected={formData.status == 'stuck'} value="stuck">Stuck</option>
                   <option selected={formData.status == 'not started'} value="not started">Not Started</option>
                 </select>
 
@@ -190,7 +219,7 @@ const TicketPage = ({ editMode }) => {
               type="text"
               onChange={handleChange}
               required={true}
-              value={formData.owner}
+              value={formData.owner||''}
             />
 
 
@@ -200,8 +229,8 @@ const TicketPage = ({ editMode }) => {
               name="avatar"
               type="url"
               onChange={handleChange}
-              required={true}
-              value={formData.avatar}
+              
+              value={formData.avatar||''}
             />
 
             <div className='img-preview'>

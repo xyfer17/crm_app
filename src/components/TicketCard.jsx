@@ -18,7 +18,7 @@ const TicketCard = ({color, ticket}) => {
 
 
 
-      <DeleteBlock />
+      <DeleteBlock documentId={ticket.documentId} />
     </div>
   )
 }
