@@ -3,9 +3,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import CategoriesContext from '../context'
 
-const TicketPage = ({ editMode }) => {
+const TicketPage = ({ editMode ,view}) => {
 
-  const [formData, setFormDate] = useState({
+  const [formData, setFormData] = useState({
     status: 'not started',
     progress: 0,
     timestamp: new Date().toISOString()
@@ -23,7 +23,7 @@ const TicketPage = ({ editMode }) => {
       e.preventDefault()
 
       if(editMode){
-        const response = await axios.put(`http://localhost:8080/tickets/${id}`,{
+        const response = await axios.put(`http://localhost:4004/tickets/${id}`,{
           data:formData,
         })
         const success=response.status ==200
@@ -34,7 +34,7 @@ const TicketPage = ({ editMode }) => {
       }
 
       if(!editMode){
-        const  response = await axios.post('http://localhost:8080/tickets',{
+        const  response = await axios.post('http://localhost:4004/tickets',{
           formData
         })
 
@@ -50,22 +50,29 @@ const TicketPage = ({ editMode }) => {
   const handleChange = (e) => {
     const value = e.target.value
     const name = e.target.name
-    setFormDate((prevState) => ({
+    setFormData((prevState) => ({
       ...prevState,
       [name]: value
     }))
   }
 
   const fetchData = async ()=>{
-    const response = await axios.get(`http://localhost:8080/tickets/${id}`)
+    const response = await axios.get(`http://localhost:4004/tickets/${id}`)
     console.log('AAAAAA',response)
-    setFormDate(response.data.data)
+    setFormData(response.data.data)
   }
 
   useEffect(()=>{
+
+    
+    
+
     if(editMode){
       fetchData()
+      
     }
+
+  
     
   },[])
 
@@ -87,7 +94,7 @@ const TicketPage = ({ editMode }) => {
               type="text"
               onChange={handleChange}
               required={true}
-              value={formData.title||''}
+              value={editMode?formData.title:''}
             />
             <label htmlFor='description'>Description</label>
             <input
@@ -96,7 +103,7 @@ const TicketPage = ({ editMode }) => {
               type="text"
               onChange={handleChange}
               required={true}
-              value={formData.description||''}
+              value={editMode?formData.description:''}
             />
 
             <label>Category</label>
@@ -116,7 +123,7 @@ const TicketPage = ({ editMode }) => {
               type="text"
               onChange={handleChange}
               required={true}
-              value={formData.category||''}
+              value={formData.category}
             />
 
             <label>Priority</label>
@@ -178,7 +185,7 @@ const TicketPage = ({ editMode }) => {
                   type="range"
                   id="progress"
                   name="progress"
-                  value={formData.progress||''}
+                  value={editMode?formData.progress:''}
                   min="0"
                   max="100"
                   onChange={handleChange}
@@ -190,7 +197,7 @@ const TicketPage = ({ editMode }) => {
                 <label>Status</label>
                 <select
                   name='status'
-                  value={formData.status||''}
+                  value={editMode?formData.status:''}
                   onChange={handleChange}
                 >
                   <option selected={formData.status == 'done'} value="done" >Done</option>
@@ -219,7 +226,7 @@ const TicketPage = ({ editMode }) => {
               type="text"
               onChange={handleChange}
               required={true}
-              value={formData.owner||''}
+              value={editMode?formData.owner:''}
             />
 
 
@@ -230,7 +237,7 @@ const TicketPage = ({ editMode }) => {
               type="url"
               onChange={handleChange}
               
-              value={formData.avatar||''}
+              value={editMode?formData.avatar:''}
             />
 
             <div className='img-preview'>
